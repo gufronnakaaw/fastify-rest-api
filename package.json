@@ -1,0 +1,35 @@
+{
+  "name": "fastify-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.ts",
+  "scripts": {
+    "lint": "eslint ./src/*",
+    "lint:fix": "eslint ./src/* --fix",
+    "dev": "nodemon ./build/server.js",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "Gufronnaka Arif Wildan",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.15.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.21",
+    "prettier": "^2.8.4",
+    "prisma": "^4.11.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.2.0",
+    "@prisma/client": "^4.11.0",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.14.1"
+  }
+}
