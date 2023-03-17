@@ -21,6 +21,8 @@
         "optionalDependencies": false,
         "peerDependencies": false
       }
-    ]
+    ],
+    "import/no-unresolved": "off",
+    "import/extensions": "off"
   }
 }
