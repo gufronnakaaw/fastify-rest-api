@@ -6,10 +6,11 @@ import fastify, {
 
 import cors from '@fastify/cors';
 import dotenv from 'dotenv';
+import SellerRoutes from './sellers/seller.route';
 
 dotenv.config();
 
-const port = Number(process.env.port);
+const port: number = Number(process.env.port);
 
 const server: FastifyInstance = fastify();
 
@@ -22,6 +23,8 @@ server.get('/', (req: FastifyRequest, rep: FastifyReply) => {
     message: 'Welcome to Fastify REST API',
   });
 });
+
+server.register(SellerRoutes, { prefix: 'sellers' });
 
 const start = async () => {
   try {
