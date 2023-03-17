@@ -6,13 +6,14 @@
   "scripts": {
     "lint": "eslint ./src/*",
     "lint:fix": "eslint ./src/* --fix",
-    "dev": "nodemon ./build/server.js",
+    "dev": "nodemon ./build/src/server.js",
     "build": "tsc",
     "watch": "tsc -w"
   },
   "author": "Gufronnaka Arif Wildan",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "^18.15.1",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
@@ -24,11 +25,13 @@
     "nodemon": "^2.0.21",
     "prettier": "^2.8.4",
     "prisma": "^4.11.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   },
   "dependencies": {
     "@fastify/cors": "^8.2.0",
     "@prisma/client": "^4.11.0",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.14.1",
     "zod": "^3.21.4"
