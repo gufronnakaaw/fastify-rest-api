@@ -12,28 +12,34 @@ datasource db {
 
 model Seller {
   id          Int       @id @default(autoincrement())
+  id_seller   String    @db.VarChar(255)
   domain      String    @unique @db.VarChar(255)
   name        String    @unique @db.VarChar(255)
   email       String    @unique @db.VarChar(100)
   phone       String?   @unique @db.VarChar(15)
   description String?   @db.Text
   password    String    @db.VarChar(255)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
   Product     Product[]
+
+  @@map("sellers")
 }
 
 model Product {
   id          Int      @id @default(autoincrement())
+  id_product  String   @db.VarChar(255)
   name        String   @unique @db.VarChar(255)
   slug        String   @unique @db.VarChar(255)
   description String   @db.Text
   stock       Int      @db.UnsignedInt
   price       Int      @db.UnsignedInt
-  seller      Seller   @relation(fields: [sellerID], references: [id])
-  sellerID    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  seller      Seller   @relation(fields: [seller_id], references: [id])
+  seller_id   Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   @@index([name, slug])
+
+  @@map("products")
 }
