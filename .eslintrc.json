@@ -23,6 +23,8 @@
       }
     ],
     "import/no-unresolved": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "consistent-return": "off",
+    "prefer-default-export": "off"
   }
 }

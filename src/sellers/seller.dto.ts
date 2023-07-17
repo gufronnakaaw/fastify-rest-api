@@ -1,8 +1,10 @@
-import { z } from 'zod';
 import { RouteShorthandOptions } from 'fastify';
-import { CreateSellerSchema } from './seller.schema';
+import { CreateSellerSchemaType } from './seller.schema';
 
-export type CreateSellerDTO = z.infer<typeof CreateSellerSchema>;
+export type CreateSellerDTO = { id: string } & Omit<
+  CreateSellerSchemaType,
+  'password'
+>;
 
 export const ResponseCreateSellerDTO: RouteShorthandOptions = {
   schema: {
@@ -10,11 +12,19 @@ export const ResponseCreateSellerDTO: RouteShorthandOptions = {
       201: {
         type: 'object',
         properties: {
-          domain: { type: 'string' },
-          name: { type: 'string' },
-          email: { type: 'string' },
-          phone: { type: 'string', nullable: true },
-          description: { type: 'string', nullable: true },
+          success: { type: 'boolean' },
+          data: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              domain: { type: 'string' },
+              name: { type: 'string' },
+              email: { type: 'string' },
+              phone: { type: 'string', nullable: true },
+              description: { type: 'string', nullable: true },
+            },
+          },
+          errors: { type: 'null' },
         },
       },
     },

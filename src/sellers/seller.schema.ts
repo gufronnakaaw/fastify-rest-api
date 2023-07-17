@@ -30,4 +30,4 @@ export const CreateSellerSchema = z.object({
     .trim(),
 });
 
-export const UpdateSellerSchema = z.object({});
+export type CreateSellerSchemaType = z.infer<typeof CreateSellerSchema>;
