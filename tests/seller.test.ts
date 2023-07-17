@@ -1,6 +1,13 @@
-import { describe, it, expect, afterAll } from '@jest/globals';
+import {
+  describe,
+  it,
+  expect,
+  afterAll,
+  afterEach,
+  beforeEach,
+} from '@jest/globals';
 import build from '../utils/server';
-import { removeTestUser } from './utils/seller.util';
+import { createTestUser, removeTestUser } from './utils/seller.util';
 
 describe('POST /sellers/register', () => {
   afterAll(async () => {
@@ -149,6 +156,114 @@ describe('POST /sellers/register', () => {
       url: '/sellers/register',
       payload,
     });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(Array.isArray(response.json().errors)).toBe(true);
+  });
+});
+
+describe('POST /sellers/login', () => {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeTestUser();
+  });
+
+  it('should can login', async () => {
+    const server = build();
+
+    const payload = {
+      email: 'testing@mail.com',
+      password: 'testingpass',
+    };
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/sellers/login',
+      payload,
+    });
+
+    // console.log(response.json());
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('data');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeTruthy();
+    expect(response.json().data.token).toBeDefined();
+    expect(response.json().errors).toBeNull();
+  });
+
+  it('should not found', async () => {
+    const server = build();
+
+    const payload = {
+      email: 'testing1@mail.com',
+      password: 'testingpass',
+    };
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/sellers/login',
+      payload,
+    });
+
+    // console.log(response.json());
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+
+  it('should wrong password', async () => {
+    const server = build();
+
+    const payload = {
+      email: 'testing@mail.com',
+      password: 'wrongpass',
+    };
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/sellers/login',
+      payload,
+    });
+
+    // console.log(response.json());
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+
+  it('should request invalid', async () => {
+    const server = build();
+
+    const payload = {
+      email: '',
+      password: '',
+    };
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/sellers/login',
+      payload,
+    });
+
+    // console.log(response.json());
 
     expect(response.statusCode).toBe(400);
     expect(response.json()).toHaveProperty('success');

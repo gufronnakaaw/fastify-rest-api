@@ -1,7 +1,12 @@
-import { CreateSellerDTO } from './seller.dto';
-import { CreateSellerSchema, CreateSellerSchemaType } from './seller.schema';
+import { CreateSellerDTO, LoginSellerDTO } from './seller.dto';
+import {
+  CreateSellerSchema,
+  CreateSellerSchemaType,
+  LoginSellerSchema,
+  LoginSellerSchemaType,
+} from './seller.schema';
 import { SellerEntity } from './seller.entity';
-import { hashpassword } from '../../utils/hashandcheck';
+import { hashpassword, checkpassword } from '../../utils/hashandcheck';
 import prisma from '../../utils/database';
 import generate from '../../utils/generate';
 import validate from '../../utils/validate';
@@ -78,8 +83,36 @@ async function create(body: any) {
   return feedback;
 }
 
-async function login() {
-  return false;
+async function login(body: any) {
+  const result: LoginSellerSchemaType = validate(LoginSellerSchema, body);
+
+  const { email, password } = result;
+
+  const seller = await prisma.seller.findFirst({
+    where: {
+      email,
+    },
+    select: {
+      id_seller: true,
+      password: true,
+    },
+  });
+
+  if (!seller) {
+    throw new ResponseError(404, 'seller not found');
+  }
+
+  const checkPassword = await checkpassword(password, seller.password);
+
+  if (!checkPassword) {
+    throw new ResponseError(400, 'wrong password');
+  }
+
+  const feedback: LoginSellerDTO = {
+    id: seller.id_seller,
+  };
+
+  return feedback;
 }
 
 export { create, login };

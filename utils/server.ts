@@ -6,14 +6,23 @@ import fastify, {
 import cors from '@fastify/cors';
 import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
+import fastifyJwt from '@fastify/jwt';
 import SellerRoutes from '../src/sellers/seller.route';
 import ResponseError from '../errors/ResponseError';
 
 function build() {
   const server: FastifyInstance = fastify();
+  const secret: string = String(process.env.secretkey);
 
   server.register(cors, {
     origin: '*',
+  });
+
+  server.register(fastifyJwt, {
+    secret,
+    sign: {
+      expiresIn: '1h',
+    },
   });
 
   server.get('/', (req: FastifyRequest, rep: FastifyReply) => {

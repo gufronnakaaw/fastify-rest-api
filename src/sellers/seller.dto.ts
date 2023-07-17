@@ -30,3 +30,27 @@ export const ResponseCreateSellerDTO: RouteShorthandOptions = {
     },
   },
 };
+
+export type LoginSellerDTO = {
+  id: string;
+};
+
+export const ResponseLoginSellerDTO: RouteShorthandOptions = {
+  schema: {
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: {
+            type: 'object',
+            properties: {
+              token: { type: 'string' },
+            },
+          },
+          errors: { type: 'null' },
+        },
+      },
+    },
+  },
+};

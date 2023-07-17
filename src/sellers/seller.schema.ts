@@ -31,3 +31,20 @@ export const CreateSellerSchema = z.object({
 });
 
 export type CreateSellerSchemaType = z.infer<typeof CreateSellerSchema>;
+
+export const LoginSellerSchema = z.object({
+  email: z
+    .string({
+      required_error: 'email is required',
+    })
+    .email()
+    .trim(),
+  password: z
+    .string({
+      required_error: 'password is required',
+    })
+    .min(1)
+    .trim(),
+});
+
+export type LoginSellerSchemaType = z.infer<typeof LoginSellerSchema>;
