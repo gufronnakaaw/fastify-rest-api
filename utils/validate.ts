@@ -1,6 +1,6 @@
 import { ZodSchema } from 'zod';
 
-function validate(schema: ZodSchema, data: any) {
+function validate<T>(schema: ZodSchema<T>, data: any) {
   return schema.parse(data);
 }
 
