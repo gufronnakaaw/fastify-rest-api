@@ -1,50 +1,46 @@
-import { z } from 'zod';
+import { RouteShorthandOptions } from 'fastify';
 
-export const CreateSellerSchema = z.object({
-  domain: z
-    .string({
-      required_error: 'domain is required',
-    })
-    .min(1)
-    .trim()
-    .toLowerCase(),
-  name: z
-    .string({
-      required_error: 'name is required',
-    })
-    .min(1)
-    .trim(),
-  email: z
-    .string({
-      required_error: 'email is required',
-    })
-    .email()
-    .trim(),
-  phone: z.string().optional(),
-  description: z.string().optional(),
-  password: z
-    .string({
-      required_error: 'password is required',
-    })
-    .min(1)
-    .trim(),
-});
+export const ResponseCreateSellerSchema: RouteShorthandOptions = {
+  schema: {
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              domain: { type: 'string' },
+              name: { type: 'string' },
+              email: { type: 'string' },
+              phone: { type: 'string', nullable: true },
+              description: { type: 'string', nullable: true },
+            },
+          },
+          errors: { type: 'null' },
+        },
+      },
+    },
+  },
+};
 
-export type CreateSellerSchemaType = z.infer<typeof CreateSellerSchema>;
-
-export const LoginSellerSchema = z.object({
-  email: z
-    .string({
-      required_error: 'email is required',
-    })
-    .email()
-    .trim(),
-  password: z
-    .string({
-      required_error: 'password is required',
-    })
-    .min(1)
-    .trim(),
-});
-
-export type LoginSellerSchemaType = z.infer<typeof LoginSellerSchema>;
+export const ResponseLoginSellerSchema: RouteShorthandOptions = {
+  schema: {
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: {
+            type: 'object',
+            properties: {
+              token: { type: 'string' },
+            },
+          },
+          errors: { type: 'null' },
+        },
+      },
+    },
+  },
+};

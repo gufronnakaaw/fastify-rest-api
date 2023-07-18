@@ -1,10 +1,8 @@
 import { CreateSellerDTO, LoginSellerDTO } from './seller.dto';
 import {
-  CreateSellerSchema,
-  CreateSellerSchemaType,
-  LoginSellerSchema,
-  LoginSellerSchemaType,
-} from './seller.schema';
+  CreateSellerValidation,
+  LoginSellerValidation,
+} from './seller.validation';
 import { SellerEntity } from './seller.entity';
 import { hashpassword, checkpassword } from '../../utils/hashandcheck';
 import prisma from '../../utils/database';
@@ -13,7 +11,7 @@ import validate from '../../utils/validate';
 import ResponseError from '../../errors/ResponseError';
 
 async function create(body: any) {
-  const result: CreateSellerSchemaType = validate(CreateSellerSchema, body);
+  const result: CreateSellerDTO = validate(CreateSellerValidation, body);
 
   const checkDomain = await prisma.seller.count({
     where: {
@@ -75,7 +73,7 @@ async function create(body: any) {
 
   const { password, ...except } = result;
 
-  const feedback: CreateSellerDTO = {
+  const feedback = {
     id: idSeller,
     ...except,
   };
@@ -84,7 +82,7 @@ async function create(body: any) {
 }
 
 async function login(body: any) {
-  const result: LoginSellerSchemaType = validate(LoginSellerSchema, body);
+  const result: LoginSellerDTO = validate(LoginSellerValidation, body);
 
   const { email, password } = result;
 
@@ -108,7 +106,7 @@ async function login(body: any) {
     throw new ResponseError(400, 'wrong password');
   }
 
-  const feedback: LoginSellerDTO = {
+  const feedback = {
     id: seller.id_seller,
   };
 
