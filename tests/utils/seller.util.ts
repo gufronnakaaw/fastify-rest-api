@@ -21,3 +21,22 @@ export async function createTestUser() {
     },
   });
 }
+
+export async function getTestUser() {
+  return prisma.seller.findFirst({
+    where: {
+      domain: 'testing',
+    },
+    select: {
+      id: true,
+    },
+  });
+}
+
+export async function deleteTestProduct(sellerId: number) {
+  await prisma.product.deleteMany({
+    where: {
+      seller_id: sellerId,
+    },
+  });
+}

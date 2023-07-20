@@ -8,6 +8,7 @@ import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
 import fastifyJwt from '@fastify/jwt';
 import SellerRoutes from '../src/sellers/seller.route';
+import ProductRoutes from '../src/products/product.route';
 import ResponseError from '../errors/ResponseError';
 
 function build() {
@@ -32,6 +33,7 @@ function build() {
   });
 
   server.register(SellerRoutes, { prefix: 'sellers' });
+  server.register(ProductRoutes, { prefix: 'products' });
 
   server.setErrorHandler((error, req, rep) => {
     if (error instanceof ResponseError) {
