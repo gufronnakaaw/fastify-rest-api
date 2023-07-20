@@ -25,6 +25,8 @@
     "import/no-unresolved": "off",
     "import/extensions": "off",
     "consistent-return": "off",
-    "prefer-default-export": "off"
+    "prefer-default-export": "off",
+    "no-shadow": "off",
+    "import/prefer-default-export": "off"
   }
 }
