@@ -10,7 +10,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest -i",
-    "test:seller": "jest -i --testPathPattern='tests/seller.test.ts'"
+    "test:seller": "jest -i --testPathPattern='tests/seller.test.ts'",
+    "test:product": "jest -i --testPathPattern='tests/product.test.ts'"
   },
   "jest": {
     "transform": {
