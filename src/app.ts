@@ -13,7 +13,7 @@ async function app() {
     await server.listen({ port });
     logger.info(`server is running at http://localhost:${port}`);
   } catch (error) {
-    server.log.error(error);
+    logger.error(error);
     process.exit(1);
   }
 }
