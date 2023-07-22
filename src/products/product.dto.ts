@@ -14,3 +14,12 @@ export interface ResponseCreateProductDTO {
   price: number;
   seller_id: string;
 }
+
+export interface ResponseGetOneProductDTO {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  stock: number;
+  price: number;
+}

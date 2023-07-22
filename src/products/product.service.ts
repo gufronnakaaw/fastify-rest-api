@@ -42,4 +42,48 @@ async function create(sellerId: string, body: any) {
   };
 }
 
-export { create };
+async function getOne(domain: string, slug: string) {
+  const seller = await prisma.seller.findFirst({
+    where: {
+      domain,
+    },
+  });
+
+  if (!seller) {
+    throw new ResponseError(404, 'seller not found');
+  }
+
+  const product = await prisma.product.findFirst({
+    where: {
+      AND: [
+        {
+          slug,
+        },
+        {
+          seller_id: seller.id,
+        },
+      ],
+    },
+    select: {
+      id_product: true,
+      name: true,
+      slug: true,
+      description: true,
+      stock: true,
+      price: true,
+    },
+  });
+
+  if (!product) {
+    throw new ResponseError(404, 'product not found');
+  }
+
+  const { id_product, ...except } = product;
+
+  return {
+    id: id_product,
+    ...except,
+  };
+}
+
+export { create, getOne };
