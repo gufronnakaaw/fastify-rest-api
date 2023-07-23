@@ -1,17 +1,12 @@
-import {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  HookHandlerDoneFunction,
-} from 'fastify';
-import ResponseError from '../../errors/ResponseError';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { create, getOne } from './product.service';
 import Response from '../../types/Response';
 import {
   ResponseCreateProductDTO,
   ResponseGetOneProductDTO,
 } from './product.dto';
-import { ResponseCreateProductSchema } from './product.schema';
+import { CreateProductOptions } from './product.schema';
+import logger from '../../utils/logger';
 
 declare module 'fastify' {
   export interface FastifyRequest {
@@ -21,32 +16,12 @@ declare module 'fastify' {
   }
 }
 
-async function preHandler(
-  req: FastifyRequest,
-  rep: FastifyReply,
-  done: HookHandlerDoneFunction
-) {
-  try {
-    const { id }: { id: string } = await req.jwtVerify();
-
-    req.seller = {
-      id,
-    };
-
-    done();
-  } catch (error) {
-    throw new ResponseError(401, 'Unauthorized');
-  }
-}
-
 export default async function routes(fastify: FastifyInstance) {
   fastify.post(
     '/',
-    {
-      preHandler,
-      schema: ResponseCreateProductSchema.schema,
-    },
+    CreateProductOptions,
     async (req: FastifyRequest, rep: FastifyReply) => {
+      logger.info('ke hit mang');
       try {
         const data = await create(req.seller.id, req.body);
 
@@ -83,7 +58,7 @@ export default async function routes(fastify: FastifyInstance) {
           errors: null,
         };
 
-        return rep.code(201).send(response);
+        return rep.code(200).send(response);
       } catch (error) {
         rep.send(error);
       }

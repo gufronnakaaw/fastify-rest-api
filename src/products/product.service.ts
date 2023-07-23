@@ -23,6 +23,23 @@ async function create(sellerId: string, body: any) {
     throw new ResponseError(404, 'seller not found');
   }
 
+  const product = await prisma.product.count({
+    where: {
+      AND: [
+        {
+          slug: slug(valid.name),
+        },
+        {
+          seller_id: seller.id,
+        },
+      ],
+    },
+  });
+
+  if (product > 0) {
+    throw new ResponseError(400, 'product already exists');
+  }
+
   const data: ProductEntity = {
     id_product: generate(),
     ...valid,

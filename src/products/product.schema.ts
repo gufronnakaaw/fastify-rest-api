@@ -1,6 +1,18 @@
-import { RouteShorthandOptions } from 'fastify';
+import { FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
+import ResponseError from '../../errors/ResponseError';
 
-export const ResponseCreateProductSchema: RouteShorthandOptions = {
+export const CreateProductOptions: RouteShorthandOptions = {
+  onRequest: async (req: FastifyRequest, rep: FastifyReply) => {
+    try {
+      const { id }: { id: string } = await req.jwtVerify();
+
+      req.seller = {
+        id,
+      };
+    } catch (error) {
+      throw new ResponseError(401, 'Unauthorized');
+    }
+  },
   schema: {
     response: {
       201: {
