@@ -1,6 +1,6 @@
 import { RouteShorthandOptions } from 'fastify';
 
-export const ResponseCreateSellerSchema: RouteShorthandOptions = {
+export const CreateSellerOptions: RouteShorthandOptions = {
   schema: {
     response: {
       201: {
@@ -25,7 +25,7 @@ export const ResponseCreateSellerSchema: RouteShorthandOptions = {
   },
 };
 
-export const ResponseLoginSellerSchema: RouteShorthandOptions = {
+export const LoginSellerOptions: RouteShorthandOptions = {
   schema: {
     response: {
       200: {

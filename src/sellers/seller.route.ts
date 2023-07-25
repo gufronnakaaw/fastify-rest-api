@@ -1,8 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import {
-  ResponseCreateSellerSchema,
-  ResponseLoginSellerSchema,
-} from './seller.schema';
+import { CreateSellerOptions, LoginSellerOptions } from './seller.schema';
 import { create, login } from './seller.service';
 import Response from '../../types/Response';
 import { ResponseCreateSellerDTO, ResponseLoginSellerDTO } from './seller.dto';
@@ -10,7 +7,7 @@ import { ResponseCreateSellerDTO, ResponseLoginSellerDTO } from './seller.dto';
 export default async function routes(fastify: FastifyInstance) {
   fastify.post(
     '/register',
-    ResponseCreateSellerSchema,
+    CreateSellerOptions,
     async (req: FastifyRequest, rep: FastifyReply) => {
       try {
         const data = await create(req.body);
@@ -30,7 +27,7 @@ export default async function routes(fastify: FastifyInstance) {
 
   fastify.post(
     '/login',
-    ResponseLoginSellerSchema,
+    LoginSellerOptions,
     async (req: FastifyRequest, rep: FastifyReply) => {
       try {
         const { id } = await login(req.body);
