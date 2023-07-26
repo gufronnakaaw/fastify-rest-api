@@ -32,11 +32,3 @@ export async function getTestUser() {
     },
   });
 }
-
-export async function deleteTestProduct(sellerId: number) {
-  await prisma.product.deleteMany({
-    where: {
-      seller_id: sellerId,
-    },
-  });
-}
