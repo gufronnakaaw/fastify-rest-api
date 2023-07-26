@@ -27,8 +27,5 @@ export async function getTestUser() {
     where: {
       domain: 'testing',
     },
-    select: {
-      id: true,
-    },
   });
 }

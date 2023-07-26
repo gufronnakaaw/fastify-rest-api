@@ -5,7 +5,11 @@ import {
   getTestUser,
   removeTestUser,
 } from './utils/seller.util';
-import { deleteTestProduct } from './utils/product.util';
+import {
+  createTestProduct,
+  deleteTestProduct,
+  getTestProduct,
+} from './utils/product.util';
 import slug from '../utils/slug';
 import logger from '../utils/logger';
 
@@ -167,5 +171,78 @@ describe('POST /products', () => {
 
     expect(duplicate.json().success).toBeFalsy();
     expect(duplicate.json().errors).toBeDefined();
+  });
+});
+
+describe('GET /products/:domain/:slug', () => {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestProduct();
+  });
+
+  afterEach(async () => {
+    await deleteTestProduct();
+    await removeTestUser();
+  });
+
+  it('should can get one data', async () => {
+    const server = build();
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'GET',
+      url: `/products/${seller?.domain}/${product?.slug}`,
+    });
+
+    // logger.info(response.json());
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('data');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().data.id).toBeDefined();
+    expect(response.json().data.name).toBeDefined();
+    expect(response.json().data.slug).toBeDefined();
+    expect(response.json().data.description).toBeDefined();
+    expect(response.json().data.stock).toBeDefined();
+    expect(response.json().data.price).toBeDefined();
+  });
+
+  it('should reject if domain not found', async () => {
+    const server = build();
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'GET',
+      url: `/products/${seller?.domain}wrong/${product?.slug}`,
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+
+  it('should reject if slug not found', async () => {
+    const server = build();
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'GET',
+      url: `/products/${seller?.domain}/${product?.slug}-wrong`,
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
   });
 });

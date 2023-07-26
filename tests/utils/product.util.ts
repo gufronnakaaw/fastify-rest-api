@@ -29,3 +29,26 @@ export async function createTestProduct() {
     },
   });
 }
+
+export async function getTestProduct() {
+  const seller = await getTestUser();
+
+  const product = await prisma.product.findFirst({
+    where: {
+      seller_id: seller!.id,
+    },
+  });
+
+  return prisma.product.findFirst({
+    where: {
+      AND: [
+        {
+          seller_id: seller!.id,
+        },
+        {
+          slug: product!.slug,
+        },
+      ],
+    },
+  });
+}
