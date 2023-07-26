@@ -21,7 +21,6 @@ export default async function routes(fastify: FastifyInstance) {
     '/',
     CreateProductOptions,
     async (req: FastifyRequest, rep: FastifyReply) => {
-      logger.info('ke hit mang');
       try {
         const data = await create(req.seller.id, req.body);
 

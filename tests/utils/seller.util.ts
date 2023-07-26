@@ -27,16 +27,5 @@ export async function getTestUser() {
     where: {
       domain: 'testing',
     },
-    select: {
-      id: true,
-    },
-  });
-}
-
-export async function deleteTestProduct(sellerId: number) {
-  await prisma.product.deleteMany({
-    where: {
-      seller_id: sellerId,
-    },
   });
 }
