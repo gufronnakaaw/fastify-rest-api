@@ -1,5 +1,5 @@
 export default interface Response<T> {
-  success: true;
-  data: T;
+  success: boolean;
+  data?: T;
   errors: null;
 }

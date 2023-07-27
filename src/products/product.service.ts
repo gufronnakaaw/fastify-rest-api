@@ -103,4 +103,46 @@ async function getOne(domain: string, slug: string) {
   };
 }
 
-export { create, getOne };
+async function remove(sellerId: string, domain: string, slug: string) {
+  const seller = await prisma.seller.findFirst({
+    where: {
+      id_seller: sellerId,
+    },
+    select: {
+      domain: true,
+      id: true,
+    },
+  });
+
+  if (seller?.domain !== domain) {
+    throw new ResponseError(400, 'wrong domain');
+  }
+
+  const product = await prisma.product.findFirst({
+    where: {
+      AND: [
+        {
+          slug,
+        },
+        {
+          seller_id: seller.id,
+        },
+      ],
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!product) {
+    throw new ResponseError(404, 'product not found');
+  }
+
+  return prisma.product.delete({
+    where: {
+      id: product.id,
+    },
+  });
+}
+
+export { create, getOne, remove };

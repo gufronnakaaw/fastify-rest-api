@@ -37,3 +37,28 @@ export const CreateProductOptions: RouteShorthandOptions = {
     },
   },
 };
+
+export const RemoveProductOptions: RouteShorthandOptions = {
+  onRequest: async (req: FastifyRequest, rep: FastifyReply) => {
+    try {
+      const { id }: { id: string } = await req.jwtVerify();
+
+      req.seller = {
+        id,
+      };
+    } catch (error) {
+      throw new ResponseError(401, 'Unauthorized');
+    }
+  },
+  schema: {
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          errors: { type: 'null' },
+        },
+      },
+    },
+  },
+};

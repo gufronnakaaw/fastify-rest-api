@@ -246,3 +246,103 @@ describe('GET /products/:domain/:slug', () => {
     expect(response.json().errors).toBeDefined();
   });
 });
+
+describe('DELETE /products/:domain/:slug', () => {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestProduct();
+  });
+
+  afterEach(async () => {
+    await deleteTestProduct();
+    await removeTestUser();
+  });
+
+  it('should can remove product', async () => {
+    const server = build();
+    const { token } = await doLogin();
+
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'DELETE',
+      url: `/products/${seller?.domain}/${product?.slug}`,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeTruthy();
+    expect(response.json().errors).toBeNull();
+  });
+
+  it('should reject if wrong domain', async () => {
+    const server = build();
+    const { token } = await doLogin();
+
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'DELETE',
+      url: `/products/${seller?.domain}wrong/${product?.slug}`,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+
+  it('should reject if product not found', async () => {
+    const server = build();
+    const { token } = await doLogin();
+
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'DELETE',
+      url: `/products/${seller?.domain}/${product?.slug}-wrong`,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+
+  it('should reject if not login', async () => {
+    const server = build();
+
+    const seller = await getTestUser();
+    const product = await getTestProduct();
+
+    const response = await server.inject({
+      method: 'DELETE',
+      url: `/products/${seller?.domain}/${product?.slug}`,
+    });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.json()).toHaveProperty('success');
+    expect(response.json()).toHaveProperty('errors');
+
+    expect(response.json().success).toBeFalsy();
+    expect(response.json().errors).toBeDefined();
+  });
+});
